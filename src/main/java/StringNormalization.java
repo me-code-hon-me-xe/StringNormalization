@@ -1,50 +1,37 @@
 import java.util.Scanner;
 
-public class ChuanHoaKyTu {
+public class StringNormalization {
     public static void main(String[] args) {
+
+        // Get input from user
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Nhập vào chuỗi ký tự bất kỳ: ");
+
+        System.out.println("Please input the String: ");
         String input = scanner.nextLine();
 
-        String normalizedString = normalizeString(input);
+        String removedChar = input.replaceAll("[^a-zA-Z\\s]", "").trim();
 
-        int wordCount = countWords(normalizedString);
+        removedChar = removedChar.replaceAll("\\s+", " ");
 
-        boolean isPalindrome = checkPalindrome(normalizedString);
-
-        System.out.println(normalizedString);
-        System.out.println(wordCount + " từ");
-        System.out.println(isPalindrome ? "Đối xứng" : "Không đối xứng");
-    }
-
-    private static String normalizeString(String input) {
-        String cleanedString = input.replaceAll("[^a-zA-Z ]", "");
-        String[] words = cleanedString.trim().split("\\s+");
-        StringBuilder normalizedString = new StringBuilder();
+        String[] words = removedChar.split(" ");
+        StringBuilder capitalizedLetter = new StringBuilder();
         for (String word : words) {
-            normalizedString.append(Character.toUpperCase(word.charAt(0)))
-                    .append(word.substring(1).toLowerCase())
-                    .append(" ");
-        }
-
-        return normalizedString.toString().trim();
-    }
-
-    private static int countWords(String input) {
-        if (input.isEmpty()) {
-            return 0;
-        }
-        return input.split("\\s+").length;
-    }
-
-    private static boolean checkPalindrome(String input) {
-        String processedString = input.replaceAll("\\s+", "").toLowerCase();
-        int n = processedString.length();
-        for (int i = 0; i < n / 2; i++) {
-            if (processedString.charAt(i) != processedString.charAt(n - i - 1)) {
-                return false;
+            if (!word.isEmpty()) {
+                capitalizedLetter.append(Character.toUpperCase(word.charAt(0)))
+                        .append(word.substring(1).toLowerCase())
+                        .append(" ");
             }
         }
-        return true;
+
+        String finalWord = capitalizedLetter.toString().trim();
+
+        int wordCount = finalWord.isEmpty() ? 0 : finalWord.split(" ").length;
+
+        String reversedString = new StringBuilder(finalWord).reverse().toString();
+        boolean isPalindrome = finalWord.equalsIgnoreCase(reversedString);
+
+        System.out.println("String after normalizing: " + finalWord);
+        System.out.println("Number of words: " + wordCount);
+        System.out.println("Is this string a palindrome ?" + (isPalindrome ? "Yes" : "No"));
     }
 }
